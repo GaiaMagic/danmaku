@@ -1,5 +1,4 @@
 require 'sinatra'
-require 'sinatra/contrib'
 require 'json'
 
 require 'sinatra/reloader' if development?
@@ -9,15 +8,14 @@ get '/' do
 end
 
 get '/danmaku.json' do
+  content_type :json
+
   stream do |out|
-    out << '['
-    out << JSON.dump({text: 'meow~'})
-    out << ','
-    sleep 1
-    out << JSON.dump({text: 'meow~'})
-    out << ','
-    sleep 0.5
-    out << JSON.dump({text: 'meow~'})
-    out << ']'
+    loop do
+      text = 'a' * (rand * 10).to_i
+
+      out << JSON.dump({danmaku: {text: "meow~ #{text}"}})
+      sleep (rand * 3)
+    end
   end
 end
