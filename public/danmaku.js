@@ -1,4 +1,5 @@
 var board = document.getElementById('board');
+var perf_id = document.location.pathname.split('/').slice(-2,-1)[0];
 
 var build_danmaku = function(text) {
     var dmk = document.createElement('marquee');
@@ -18,20 +19,24 @@ var build_danmaku = function(text) {
     var top = (window.innerHeight - 31) * Math.random();
 
     dmk.style.top = top + 'px';
-    dmk.innerHTML = text;
+    dmk.textContent = text;
     // dmk.setAttribute('truespeed', 'right');
 
     return dmk;
 };
 
+var evtSource = new EventSource('/performances/' +
+                                perf_id +
+                                '/danmaku/stream.json');
+
 document.onreadystatechange = function (){
     var state = document.readyState;
     if (state == 'complete') {
-        oboe('/danmaku.json')
-            .done(function(node) {
-                var dom = build_danmaku(node.danmaku.text);
-                board.appendChild(dom);
-                dom.start();
-            });
+        evtSource.addEventListener('danmaku', function (e) {
+            var node = JSON.parse(e.data);
+            var dom = build_danmaku(node.text);
+            board.appendChild(dom);
+            dom.start();
+        }, false);
     }
 };
