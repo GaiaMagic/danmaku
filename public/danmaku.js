@@ -1,26 +1,49 @@
 var board = document.getElementById('board');
-var perf_id = document.location.pathname.split('/').slice(-2,-1)[0];
+
+var speed = 2.5 * 1000;
+var scroll_amount = 10;
+var danmaku_lines = 10;
 
 var build_danmaku = function(text) {
     var dmk = document.createElement('marquee');
-    dmk.setAttribute('onfinish', 'this.remove();');
+    var box = document.createElement('div');
 
-    dmk.setAttribute('loop', '1');
+    box.setAttribute('class', 'danmaku');
+    box.style.fontSize = font_height + 'px';
+    box.style.position = 'fixed';
+    box.style.top = box.style.top = '0';
+    box.style.zIndex = '-999';
+    board.appendChild(box);
 
-    var scroll_amount = (text.length / 17) * 30;
+    var text_height = box.offsetHeight;
+    var text_width = box.offsetWidth;
 
-    dmk.setAttribute('scrollamount', '10');
-    dmk.setAttribute('scrolldelay', scroll_amount);
+    box.remove();
+
+    var screen_width  = window.innerWidth;
+    var screen_height = window.innerHeight;
+    var font_height = screen_height / danmaku_lines;
+    var top = (screen_height - text_height - 1) * Math.random();
+    var scroll_delay = speed / (screen_width + text_width) * scroll_amount;
+
     dmk.setAttribute('truespeed', 'truespeed');
     dmk.setAttribute('direction', 'left');
     dmk.setAttribute('class', 'danmaku');
+    dmk.setAttribute('loop', '1');
+    dmk.textContent = text;
 
+    dmk.setAttribute('onfinish', 'this.remove();');
 
-    var top = (window.innerHeight - 31) * Math.random();
+    dmk.style.fontSize = font_height + 'px';
 
     dmk.style.top = top + 'px';
-    dmk.textContent = text;
-    // dmk.setAttribute('truespeed', 'right');
+
+    dmk.setAttribute('scrollamount', scroll_amount);
+    dmk.setAttribute('scrolldelay', scroll_delay);
+
+    board.appendChild(dmk);
+    dmk.start();
+
 
     return dmk;
 };
@@ -32,9 +55,7 @@ document.onreadystatechange = function (){
     if (state == 'complete') {
         evtSource.addEventListener('danmaku', function (e) {
             var node = JSON.parse(e.data);
-            var dom = build_danmaku(node.text);
-            board.appendChild(dom);
-            dom.start();
+            build_danmaku(node.text);
         }, false);
     }
 };
