@@ -19,11 +19,15 @@ helpers do
   end
 
   def register_comment(perf_id)
+    @config ||= []
+    @comment ||= []
+    return unless @config[perf_id].nil?
+
     @comment[perf_id] = []
     @config[perf_id] = {
       last_update: Time.now
     }
-    EventMachine.add_period_timer(FETCH_INTERVAL) do
+    EventMachine.add_periodic_timer(FETCH_INTERVAL) do
       fetch_comments(perf_id)
     end
   end
@@ -34,7 +38,6 @@ helpers do
     params = {
       without_photos: true
     }
-
     params[:since] = @config[perf_id][:last_update].iso8601
 
     resp = RestClient.get(request_uri,
@@ -59,14 +62,10 @@ get '/performances/:id/danmaku/' do
   send_file "public/danmaku.html", type: :html
 end
 
-get '/performances/:id/danmaku/*' do
-  send_file "public/#{params[:splat].last}"
-end
-
-get '/performances/:id/danmaku/stream.js' do
-  perf_id = params[:id]
-
-  register_comment(perf_id) unless config.has_key? perf_id
+get '/performances/:id/danmaku/stream.json' do
+  puts params[:id].to_i
+  perf_id = params[:id].to_i
+  register_comment(perf_id)
 
   sse_stream do |out|
     loop do
@@ -83,4 +82,9 @@ get '/performances/:id/danmaku/stream.js' do
     end
   end
 
+end
+
+
+get '/performances/:id/danmaku/*' do
+  send_file "public/#{params[:splat].last}"
 end

@@ -25,9 +25,7 @@ var build_danmaku = function(text) {
     return dmk;
 };
 
-var evtSource = new EventSource('/performances/' +
-                                perf_id +
-                                '/danmaku/stream.json');
+var evtSource = new EventSource('stream.json');
 
 document.onreadystatechange = function (){
     var state = document.readyState;
