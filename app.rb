@@ -3,6 +3,7 @@ require 'sinatra/sse'
 require 'json'
 require 'rest-client'
 require 'time'
+require 'eventmachine'
 
 require 'sinatra/reloader' if development?
 
