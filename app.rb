@@ -19,8 +19,8 @@ helpers do
   end
 
   def register_comment(perf_id)
-    @config ||= []
-    @comment ||= []
+    @config ||= {}
+    @comment ||= {}
     return unless @config[perf_id].nil?
 
     @comment[perf_id] = []
@@ -44,11 +44,12 @@ helpers do
                           params: params)
 
     result = JSON.parse(resp)
+
     if result.empty?
       []
     else
       @config[perf_id][:last_update] = Time.now
-      @comment[perf_id] << result.reverse
+      @comment[perf_id].concat(result.reverse)
     end
   end
 end
@@ -63,7 +64,6 @@ get '/performances/:id/danmaku/' do
 end
 
 get '/performances/:id/danmaku/stream.json' do
-  puts params[:id].to_i
   perf_id = params[:id].to_i
   register_comment(perf_id)
 
