@@ -1,0 +1,4 @@
+backend:
+  build: .
+  ports:
+    - '10240:4567'
