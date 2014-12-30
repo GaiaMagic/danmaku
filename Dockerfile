@@ -1,6 +1,6 @@
 FROM ruby:2.1.5
 
-MAINTAINER Cai Guanhao (caiguanhao@gmail.com)
+MAINTAINER Shou Ya <shouyatf@gmail.com>
 
 ADD Gemfile /danmaku/Gemfile
 ADD Gemfile.lock /danmaku/Gemfile.lock
@@ -13,6 +13,6 @@ RUN bundle install
 
 EXPOSE 4567
 
-CMD ruby app.rb -p 4567
-
 ADD . /danmaku
+
+CMD ruby app.rb -p 4567 -o 0.0.0.0

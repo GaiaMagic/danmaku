@@ -7,10 +7,14 @@ require 'eventmachine'
 
 require 'sinatra/reloader' if development?
 
-REQUEST_HOST = 'https://meiyanchu.com'
+if development?
+  REQUEST_HOST = 'https://meiyanchu.com'
+else
+  REQUEST_HOST = 'https://youyanchu.com'
+end
 # REQUEST_HOST = 'http://127.0.0.1:3000'
 
-FETCH_INTERVAL = 1.0
+FETCH_INTERVAL = 2.0
 
 include Sinatra::SSE
 
