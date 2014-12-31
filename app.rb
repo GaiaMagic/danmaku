@@ -60,15 +60,15 @@ helpers do
 end
 
 
-get '/performances/:id/danmaku' do
+get '/show/:id/danmu' do
   redirect "#{request.url}/"
 end
 
-get '/performances/:id/danmaku/' do
+get '/show/:id/danmu/' do
   send_file "public/danmaku.html", type: :html
 end
 
-get '/performances/:id/danmaku/stream.json' do
+get '/show/:id/danmu/stream.json' do
   perf_id = params[:id].to_i
   register_comment(perf_id)
 
@@ -90,6 +90,6 @@ get '/performances/:id/danmaku/stream.json' do
 end
 
 
-get '/performances/:id/danmaku/*' do
+get '/show/:id/danmu/*' do
   send_file "public/#{params[:splat].last}"
 end
