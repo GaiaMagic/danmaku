@@ -1,34 +1,48 @@
-
 <html>
     <head>
-        <title>dandandan</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="robots" content="noindex, follow">
+        <title>有演出弹幕 (alpha)</title>
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
         <style>
-         html, body {
-             margin: 0px;
-         }
+        html, body {
+            margin: 0px;
+        }
 
-         body {
-             background: url('background.jpg') no-repeat;
-             background-size: cover;
-             overflow: hidden;
-         }
+        body {
+            background: url('background.jpg') no-repeat center center;
+            background-size: cover;
+            overflow: hidden;
+        }
 
-         .danmaku {
-             position: absolute;
-             width: 100%;
-             text-shadow: 0px 0px 4px rgba(150, 150, 150, 0.88);
-             color: white;
-             whitespace: nowrap;
-         }
+        .danmaku {
+            position: absolute;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+            color: white;
+            white-space: nowrap;
+            font-family: '黑体', Arial;
+            font-size: 60px;
+            padding: 0 5px;
+            transition-property: right;
+            transition-timing-function: linear;
+            right: -100%;
+        }
 
-         #board {
-             position: relative;
-         }
+        .playing {
+            right: 100% !important;
+        }
 
+        #board {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
         </style>
     </head>
     <body>
         <div id="board">
+            <div class="danmaku">adfasdfdsfsdf</div>
         </div>
         <script src="danmaku.js" type="text/javascript"></script>
     </body>
